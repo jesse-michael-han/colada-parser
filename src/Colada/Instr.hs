@@ -34,11 +34,17 @@ data Instr =
   | InstrInstructTraceSection InstructTraceSection
   deriving (Show, Eq)
 
-newtype InstructTraceSection = InstructTraceSection (Text, Maybe Text)
+data InstructTraceSection =
+    InstructTraceSection (Maybe Text, Maybe Text)
+  | InstructTraceSectionStack [(Maybe Text, Maybe Text)]
   deriving (Show, Eq)
 
 parseInstructTraceSection :: Parser InstructTraceSection
-parseInstructTraceSection = (bracket $ InstructTraceSection <$> (parseLit "trace section" *> ((,) <$> (use $ top . sectionType) <*> (use $ top . sectionId) )))
+parseInstructTraceSection = 
+  InstructTraceSection <$> (bracket $ (parseLit "trace" *> parseLit "section" *>
+    ((,) <$> (use $ top . sectionTag) <*> (use $ top . sectionId) ))) <||>
+  InstructTraceSectionStack <$> (bracket $ (parseLit "trace" *> parseLit "section" *> parseLit "stack") *>
+    (zip <$> (use $ allStates sectionTag) <*> (use $ allStates sectionId) ))
 
 parseInstr :: Parser Instr
 parseInstr =

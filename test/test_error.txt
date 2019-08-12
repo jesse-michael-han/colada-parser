@@ -4,16 +4,20 @@ Section test_error.
 
 Definition The_Riemann_zeta_function. The riemann zeta function of x is zero. This exists and is well-defined.
 
-subsection failing_parse.
+subsubsection failing_parse.
 
 Definition The_Riemann_zeta_function. The riemann zeta function of x is zero. This exists and is well-defined.
 
-[trace section]
+subdivision.
+
+[trace section stack]
+
+end subdivision.
 
 % Definition the_riemann_zeta_function. AHUERGASDRAMALAMADINGDONG.
 
-end subsection failing_parse.
+end subSUBsection failing_parse.
 
-[trace section]
+[trace section stack]
 
 end section test_error.

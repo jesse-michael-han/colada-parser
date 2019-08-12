@@ -133,5 +133,5 @@ testTests = do
   testPhraseList
   testProgramText
   testState
-  testSectionHandler
+  testSectionPreambleHandler
   putStrLn "all tests passed"
