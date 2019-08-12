@@ -137,12 +137,28 @@ sectionHandler :: a -> a -> Int -> StateVec a -> StateVec a
 sectionHandler default_value1 default_value2 0 stk =
   StateVec default_value1 []
 sectionHandler default_value1 default_value2 n stk =
+  if (n < 0) then sectionHandler default_value1 default_value2 0 stk else
   if (n < depthStateVec stk)
     then refreshStateVec default_value2 $ popStateVec (depthStateVec stk - n) stk
     else if (n == depthStateVec stk)
            then refreshStateVec default_value2 stk
            else pushStateVec default_value2 (n - depthStateVec stk) stk
 -- in sectionHandler, both popStateVec and pushStateVec are never called on a negative value
+
+-- validating behavior of SectionHandler
+testSectionHandler :: IO ()
+testSectionHandler =
+  if results == True then return () else fail "testSectionHandler failed"
+  where results :: Bool
+        results = foldr (&&) True
+          [
+            sectionHandler ("foo" :: String) ("bar") 1 (StateVec "foo" []) == (StateVec "bar" ["foo"]),
+            sectionHandler ("foo" :: String) ("bar") 2 (StateVec "foo" []) == (StateVec "bar" ["bar", "foo"]),
+            sectionHandler ("foo" :: String) ("bar") 3 (StateVec "foo" []) == (StateVec "bar" ["bar", "bar", "foo"]),
+            sectionHandler ("foo" :: String) ("bar") 0 (StateVec "bar" ["bar", "bar", "bar", "baz"]) == (StateVec "foo" []),
+            sectionHandler ("foo" :: String) ("bar") 1 (StateVec "bar" ["bar", "bar", "bar", "baz"]) == (StateVec "bar" ["baz"]),
+            sectionHandler ("foo" :: String) ("bar") (-1) (StateVec "bar" ["bar", "bar", "bar", "baz"]) == (StateVec "foo" [])
+          ]
 
 initialFStateVec :: StateVec FState
 initialFStateVec = StateVec initialFState []
