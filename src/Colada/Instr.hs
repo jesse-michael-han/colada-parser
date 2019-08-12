@@ -31,7 +31,14 @@ data Instr =
   | InstrInstructString InstructString
   | InstrInstructBool InstructBool
   | InstrInstructInt InstructInt
+  | InstrInstructTraceSection InstructTraceSection
   deriving (Show, Eq)
+
+newtype InstructTraceSection = InstructTraceSection (Text, Maybe Text)
+  deriving (Show, Eq)
+
+parseInstructTraceSection :: Parser InstructTraceSection
+parseInstructTraceSection = (bracket $ InstructTraceSection <$> (parseLit "trace section" *> ((,) <$> (use $ top . sectionType) <*> (use $ top . sectionId) )))
 
 parseInstr :: Parser Instr
 parseInstr =
@@ -39,7 +46,8 @@ parseInstr =
   InstrInstructSynonym <$> parseInstructSynonym <||>
   InstrInstructString <$> parseInstructString <||>
   InstrInstructBool <$> parseInstructBool <||>
-  InstrInstructInt <$> parseInstructInt
+  InstrInstructInt <$> parseInstructInt <||>
+  InstrInstructTraceSection <$> parseInstructTraceSection
 
 data InstructCommand = InstructCommand InstructKeywordCommand
   deriving (Show, Eq)

@@ -1,0 +1,18 @@
+TextItemSectionPreamble (SectionPreamble (SectionTagDocument ["Section"]) (Just (Label (AtomicId "test_error"))))
+
+TextItemInstr (InstrInstructTraceSection (InstructTraceSection ("Section",Just "test_error")))
+
+TextItemDeclaration (DeclarationDefinition (Definition (DefinitionPreamble (Just (Label (AtomicId "The_Riemann_zeta_function")))) [] (DefinitionAffirm (DefinitionStatementFunctionDef (FunctionDef (FunctionHeadFunctionTokenPattern (FunctionTokenPattern (TokenPattern (Tokens [Token "riemann",Token "zeta",Token "function",Token "of"]) [] (Just (TVarVar (Var "x")))))) CopulaIsDefinedAs (PlainTerm (TermDefiniteTerm (DefiniteTermNoun (PrimDefiniteNoun [ParsedWd (Token "zero")])))))) (Just (ThisExists [ThisDirectivePredVerb (ThisDirectiveVerbExists Nothing),ThisDirectivePredAdjective [["well-defined"]]])))))
+
+TextItemSectionPreamble (SectionPreamble (SectionTagDocument ["subsection"]) (Just (Label (AtomicId "failing_parse"))))
+
+TextItemDeclaration (DeclarationDefinition (Definition (DefinitionPreamble (Just (Label (AtomicId "The_Riemann_zeta_function")))) [] (DefinitionAffirm (DefinitionStatementFunctionDef (FunctionDef (FunctionHeadFunctionTokenPattern (FunctionTokenPattern (TokenPattern (Tokens [Token "riemann",Token "zeta",Token "function",Token "of"]) [] (Just (TVarVar (Var "x")))))) CopulaIsDefinedAs (PlainTerm (TermDefiniteTerm (DefiniteTermNoun (PrimDefiniteNoun [ParsedWd (Token "zero")])))))) (Just (ThisExists [ThisDirectivePredVerb (ThisDirectiveVerbExists Nothing),ThisDirectivePredAdjective [["well-defined"]]])))))
+
+TextItemInstr (InstrInstructTraceSection (InstructTraceSection ("subsection",Just "failing_parse")))
+
+TextItemSectionPostamble (SectionPostamble (SectionTagDocument ["subsection"]) (Just (Label (AtomicId "failing_parse"))))
+
+TextItemInstr (InstrInstructTraceSection (InstructTraceSection ("document",Nothing)))
+
+ERROR: offset=446:
+section postamble parse failed: tags or unequal or labels are unequal

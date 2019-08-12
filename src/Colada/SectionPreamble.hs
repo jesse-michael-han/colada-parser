@@ -46,7 +46,7 @@ parseSectionPreamble_aux = do
   
 parseSectionPreamble :: Parser SectionPreamble -- TODO: test this
 parseSectionPreamble =
-  with_result parse_section_preamble_main modify_section_id
+  (with_result parse_section_preamble_main modify_section_id) <* sc
   where
     parse_section_preamble_main :: Parser SectionPreamble
     parse_section_preamble_main =
@@ -90,16 +90,16 @@ parseSectionPostamble =
   fst <$> (with_result parseSectionPostamble_aux (postUpdateStateVec))
   where
     postUpdateStateVec :: (SectionPostamble, Int) -> Parser ()
-    postUpdateStateVec ((SectionPostamble tag ml), k) =
+    postUpdateStateVec ((SectionPostamble tag ml), k) = 
       case tag of
-        (SectionTagDocument txts) -> do
-            let endTag = (head txts)
-            startTag <- (use $ top . sectionType)
-            let endLabel = textOfLabel <$> ml
-            startLabel <- (use $ top . sectionId)
+        (SectionTagDocument txts) -> do -- txts is of the form ["section"], ["subsection"], etc
+            let endTag = (head txts) -- extract the literal section tag
+            startTag <- (use $ top . sectionType) -- extract the section tag of the local scope
+            let endLabel = textOfLabel <$> ml -- get literal section label
+            startLabel <- (use $ top . sectionId) -- extract the section label of the local scope
             if (lower_eq startTag endTag && startLabel == endLabel)
               then modify $ sectionHandler initialFState emptyFState k
-              else empty
+              else fail "section postamble parse failed: tags or unequal or labels are unequal"
         (SectionTagSubdivision txts) -> do
             let endTag = (head txts)
             startTag <- (use $ top . sectionType)
